@@ -1,11 +1,14 @@
 <?php
 
+	require_once 'connect.php';
+
 	//Requete sql from options
 
 	$select = $bdd->prepare('SELECT * FROM options');
    if($select->execute()){
-	$options = $select->fetchAll(PDO::FETCH_ASSOC); 
+	$options = $select->fetch(PDO::FETCH_ASSOC); 
    }
+
 ?><!DOCTYPE html>
 <html lang='fr'>
 
@@ -26,6 +29,9 @@
     <!-- hmtl5 shiv -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous">
     </script>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/<?= $css;?>">
+
 	</head>
 
 	<body>
@@ -34,7 +40,7 @@
 
 		<header>
 
-			<h1><?=$options['name'];?></h1>
+			<h1><?php echo $options['name'];?></h1>
 
 			<address><?=$options['address'];?></address>
 
