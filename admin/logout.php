@@ -11,7 +11,7 @@ require_once '../inc/header.php';
 	//inclure le footer
 if(isset($_GET['logout']) && ($_GET['logout'] == 'yes')){
 	unset($_SESSION['nom'], $_SESSION['prenom'], $_SESSION['email'], $_SESSION['userId']); 
-	header('Location: index.php');
+	header('Location: login.php');
 	die();
 }
 
@@ -21,10 +21,10 @@ if(isset($_GET['logout']) && ($_GET['logout'] == 'yes')){
 
 <?php if(isset($_SESSION['prenom']) && isset($_SESSION['nom']) && isset($_SESSION['email']) && isset($_SESSION['userId'])): ?>
 	<p style="text-align:center;">
-		<?php echo $_SESSION['lastname']; ?>, veux-tu te déconnecter ? Vraiment ?
+		<?php echo $_SESSION['nom']; ?>, veux-tu te déconnecter ? Vraiment ?
 
 		<br><br>
-		<img src="../assets/img/2376d801c93f9ba4cbc8788258abf247.gif" style="height:200px;border-radius:10px;">
+
 	
 		<br><br>
 
