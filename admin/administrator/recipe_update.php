@@ -79,12 +79,12 @@ if(!empty($_POST)){
 		$post[$key] = trim(strip_tags($value));
 	}
 
-	if(strlen($post['title']) < 5 || strlen($post['title']) > 50){
-		$errors[] = 'Le titre doit comporter entre 5 et 50 caractères';
+	if(!preg_match('/^[\w\d]{5,140}$/', $post['title'])){
+		$errors[] = 'Le titre doit comporter entre 5 et 140 caractères';
 	}
 
-	if(strlen($post['content']) < 20){
-		$errors[] = 'La description doit comporter au moins 20 caractères';
+	if(!preg_match('/^[\w\d]{20,}$/', $post['content'])){
+		$errors[] = 'La description doit comporter minimum 20 caractères';
 	}
 
     if(!is_numeric($post['iduser'])){

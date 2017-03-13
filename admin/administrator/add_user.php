@@ -30,13 +30,16 @@ if(!empty($_POST)){
 		$errors[] = 'Le Nom doit comporter entre 5 et 50 caractères';
 	}
 
-    if(strlen($post['password']) < 8 || strlen($post['password']) > 20) {
-		$errors[] = "Le champ Password doit avoir au minimum 8 caractères";
+    if(!preg_match('/^[\w\d]{8,20}$/', $post['password'])){
+		$errors[] = "Le champ Password doit contenir entre 8 et 20 caractères";
 	}
     
-    if(!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
-		$errors[] = "Le champ Email n'est pas conforme";
-	}
+    $pattern  = "/^([^@\s<&>]+)@(?:([-a-z0-9]+)\.)+([a-z]{2,})$/iD";
+    
+     if(!preg_match($pattern, $post['email']))
+    {
+        $errors[] = "Le champ Email n'est vraiment pas conforme";
+    }
 
     if(empty($post['role'])) {
 		$errors[] = "Un rôle doit être attribué à l'utilisateur";
@@ -75,6 +78,7 @@ require_once '../../inc/header.php';
 
 <?php
 		if(isset($textErrors)){
+           
 			echo '<p style="color:red">'.$textErrors.'</p>';
 		}
 
@@ -94,7 +98,7 @@ require_once '../../inc/header.php';
 		<input type="text" name="lastname" id="lastname">
 
 		<label for="email">Adresse email</label>
-		<input type="email" name="email" id="email">
+		<input type="text" name="email" id="email">
 		
 		<label for="password">Mot de passe</label>
 		<input type="password" name="password" id="password">
