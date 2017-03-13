@@ -19,7 +19,7 @@ if(isset($_GET['logout']) && ($_GET['logout'] == 'yes')){
 ?>
 
 
-<?php if(isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SESSION['email'])): ?>
+<?php if(isset($_SESSION['prenom']) && isset($_SESSION['nom']) && isset($_SESSION['email']) && isset($_SESSION['userId'])): ?>
 	<p style="text-align:center;">
 		<?php echo $_SESSION['lastname']; ?>, veux-tu te déconnecter ? Vraiment ?
 
@@ -28,7 +28,7 @@ if(isset($_GET['logout']) && ($_GET['logout'] == 'yes')){
 	
 		<br><br>
 
-		<a href="<?=$title;?>">Oui, je veux me déconnecter</a>
+		<a href="logout.php?logout=yes">Oui, je veux me déconnecter</a>
 	</p>
 
 <?php else: ?>
