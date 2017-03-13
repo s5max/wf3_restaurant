@@ -1,4 +1,4 @@
-@@ -1,9 +1,44 @@
+
 <?php
 
 	//inclure le header
@@ -7,14 +7,15 @@
 	//Demande de confirmation
 session_start();
 
+require_once '../inc/header.php';
 	//inclure le footer
 if(isset($_GET['logout']) && ($_GET['logout'] == 'yes')){
-	unset($_SESSION['nom'], $_SESSION['prenom'], $_SESSION['email']); 
+	unset($_SESSION['nom'], $_SESSION['prenom'], $_SESSION['email'], $_SESSION['userId']); 
 	header('Location: index.php');
 	die();
 }
 
-require_once '../inc/header.php'
+
 ?>
 
 
@@ -45,4 +46,3 @@ require_once '../inc/header.php'
 </html>	
 	
 ?>
-\ No newline at end of file
