@@ -48,7 +48,7 @@ require_once 'inc/header.php';
 
 	<p><?php echo nl2br($recette['content']); ?></p>
 
-	<img src="admin/user/<?=$recette['picture'];?>" alt="<?php echo $recette['title'];?>" height="200" width="200" >
+	<img src="uploads/<?=$recette['picture'];?>" alt="<?php echo $recette['title'];?>" height="200" width="200" >
 
 	<p>Publié le <?php echo date_format($date, 'd-m-Y'); ?> à <?php echo date_format($date, 'H:i:s'); ?></p>
 

@@ -71,6 +71,8 @@ date_default_timezone_set('America/Martinique');
 /*---------------------------------------------------------------- 
 |~ ~ ~ ~ ~       Validation du formulaire      ~ ~ ~ ~ ~ ~  |
 -----------------------------------------------------------------*/
+if(isset($_GET['id']) && !empty($_GET['id']) && is_numeric($_GET['id'])){
+	$recipeid = (int) $_GET['id'];
 
 if(!empty($_POST)){
 	foreach($_POST as $key => $value){
@@ -85,6 +87,9 @@ if(!empty($_POST)){
 		$errors[] = 'La description doit comporter au moins 20 caractères';
 	}
 
+    if(!is_numeric($post['iduser'])){
+		$errors[] = 'Il faut entre le nombre de correspondant à l\'id de l\'utilisateur';
+	}
 //Traitement de la photo de la recette
 	if(isset($_FILES['picture']) && $_FILES['picture']['error'] === 0){
 
@@ -132,19 +137,15 @@ if(!empty($_POST)){
 		}
 
 
-		$addRecipe = $bdd->prepare('INSERT INTO recipes (userId, title, content, picture, datehr) VALUES(:dataUserId, :dataTitle, :dataContent,  :dataPicture, :datadatehr)');
-
-		
-		//préparation de l'affichage de la date et de l'heure
-		$dateAndTime = date('Y/m/d H:i:s');
-		
-		
+		$addRecipe = $bdd->prepare('UPDATE recipes SET userId = :dataUserId, title= :dataTitle, content= :dataContent, picture= :dataPicture, datehr= :datadatehr WHERE recipeId=:id');
+$date= date($post['datehr']);
 //pour réccupérer l'id de l'user -- penser à décommenter
-		$addRecipe->bindValue(':dataUserId', $_SESSION['userId'] , PDO::PARAM_INT); 
+		$addRecipe->bindValue(':dataUserId', $post['iduser'], PDO::PARAM_INT); 
 		$addRecipe->bindValue(':dataTitle', $post['title']); 
 		$addRecipe->bindValue(':dataContent', $post['content']);
 		$addRecipe->bindValue(':dataPicture', $newPictureName);
-		$addRecipe->bindValue(':datadatehr', $dateAndTime);
+		$addRecipe->bindValue(':datadatehr', $date);
+        $addRecipe->bindValue(':id', $recipeid, PDO::PARAM_INT);
 
 		if($addRecipe->execute()){
 			$success = 'Youpi, la recette est ajoutée avec succès';
@@ -161,6 +162,14 @@ if(!empty($_POST)){
 		$errorsText = implode('<br>', $errors); 
 	}
 }
+    $select = $bdd->prepare('SELECT * FROM recipes WHERE recipeId = :id');
+$select->bindValue(':id',$recipeid, PDO::PARAM_INT);
+    
+if($select->execute()){
+    
+$users = $select->fetchAll(PDO::FETCH_ASSOC);
+}
+}
 
 require_once '../../inc/header.php';	
 
@@ -170,7 +179,7 @@ require_once '../../inc/header.php';
 
 
 
-	<h1>Ajouter une recette</h1>
+	<h1>Modifier la recette</h1>
 
 	<?php if(isset($errorsText)): ?>
 		<p style="color:red;"><?php echo $errorsText; ?></p>
@@ -184,23 +193,31 @@ require_once '../../inc/header.php';
 	-->
 
 	<?php if($displayForm === true): ?>
+	<?php foreach($users as $user): ?>
 	<form method="post" enctype="multipart/form-data">
 		<label for="title">Titre de la recette</label>
-		<input type="text" name="title" id="title">
+		<input type="text" name="title" id="title"value="<?php echo $user['title']; ?>">
 
 		<br>
 		<label for="content">Description</label>
-		<textarea name="content" id="content"></textarea>
+		<textarea name="content" id="content" placeholder="<?php echo $user['content']; ?>"></textarea>
 
 		<br>
 		<label for="picture">Photo</label>
-		<input type="file" name="picture" id="picture" accept="image/*">
+		<input type="file" name="picture" id="picture" accept="image/*" value="<?php echo $user['picture']; ?>">
 
+		<br>
+        <label for="iduser">ID de l'utilisateur</label>
+		<input type="text" name="iduser" id="iduser"value="<?php echo $user['userId']; ?>">
 		
-
+		<br>
+        <label for="datehr">date</label>
+		<input type="text" name="datehr" id="datehr" value="<?php echo $user['datehr']; ?>">
+		
 		<br>
 		<input type="submit" value="Envoyer ma recette">
 	</form>
+	 <?php endforeach; ?>
 	<?php endif; ?>
 
 
@@ -222,7 +239,3 @@ require_once '../../inc/footer.php';
 	//inclure le footer
 
 ?>
-
-
-
-

@@ -2,12 +2,14 @@
 
 	//inclure le header
 
-	//Gérer les recettes
+	//SELECT * recipes	ORDER BY DESC
+	//fetchAll
 
-	//inclure le footer
+session_start(); // Permet de démarrer la session
+require_once '../../inc/connect.php';
 
 $errors = [];
-$post = []; // Contiendra les données épurées
+$post = []; // Contiendra les données épurées <3 <3
 $title = 'Liste des recettes';
 $displayformlist=true;
 $displayformsearch=true;
@@ -206,5 +208,4 @@ require_once '../../inc/header.php';
     
 <?php
 require_once '../../inc/footer.php';
-
 ?>
