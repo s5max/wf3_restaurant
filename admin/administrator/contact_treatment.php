@@ -9,6 +9,15 @@
 session_start(); // Permet de démarrer la session
 require_once '../../inc/connect.php';
 
+
+
+if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin'){
+// Redirection vers la page de connexion si non connecté
+header('Location: ../login.php');
+die;
+}
+
+
 $errors = [];
 $post = []; // Contiendra les données épurées <3 <3
 $title = 'Liste des messages';
