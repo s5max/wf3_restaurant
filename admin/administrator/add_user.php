@@ -38,15 +38,18 @@ if(!empty($_POST)){
 		$errors[] = "Le champ Email n'est pas conforme";
 	}
 
-
+    if(empty($post['role'])) {
+		$errors[] = "Un rôle doit être attribué à l'utilisateur";
+	}
 
 	if(count($errors) === 0)
 	{
-		$insert = $bdd->prepare('INSERT INTO users (firstname, lastname, password, email) VALUES (:firstname, :lastname, :password, :email)');
+		$insert = $bdd->prepare('INSERT INTO users (firstname, lastname, password, email, role) VALUES (:firstname, :lastname, :password, :email, :role)');
 		$insert->bindValue(':firstname', $post['firstname']);
 		$insert->bindValue(':lastname', $post['lastname']);
 		$insert->bindValue(':password', password_hash($post['password'], PASSWORD_DEFAULT));
 		$insert->bindValue(':email', $post['email']);
+		$insert->bindValue(':role', $post['role']);
 	
 
 		if($insert->execute())
@@ -95,6 +98,14 @@ require_once '../../inc/header.php';
 		
 		<label for="password">Mot de passe</label>
 		<input type="password" name="password" id="password">
+		
+		<label for="role">Rôle de l'utilisateur</label>    
+            <select name="role">
+            <option value="" selected="selected">--Sélectionnez--</option>
+                <option value="role_editor">Editeur</option>
+                <option value="role_admin">Administrateur</option>
+                
+            </select> 
 
 		<input type="submit" value="Ajouter le membre">
 
