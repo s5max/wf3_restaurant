@@ -1,4 +1,4 @@
-@@ -1,9 +1,44 @@
+
 <?php
 
 	//inclure le header
@@ -7,27 +7,28 @@
 	//Demande de confirmation
 session_start();
 
+require_once '../inc/header.php';
 	//inclure le footer
 if(isset($_GET['logout']) && ($_GET['logout'] == 'yes')){
-	unset($_SESSION['nom'], $_SESSION['prenom'], $_SESSION['email']); 
-	header('Location: index.php');
+	unset($_SESSION['nom'], $_SESSION['prenom'], $_SESSION['email'], $_SESSION['userId']); 
+	header('Location: login.php');
 	die();
 }
 
-require_once '../inc/header.php'
+
 ?>
 
 
-<?php if(isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SESSION['email'])): ?>
+<?php if(isset($_SESSION['prenom']) && isset($_SESSION['nom']) && isset($_SESSION['email']) && isset($_SESSION['userId'])): ?>
 	<p style="text-align:center;">
-		<?php echo $_SESSION['lastname']; ?>, veux-tu te déconnecter ? Vraiment ?
+		<?php echo $_SESSION['nom']; ?>, veux-tu te déconnecter ? Vraiment ?
 
 		<br><br>
-		<img src="../assets/img/2376d801c93f9ba4cbc8788258abf247.gif" style="height:200px;border-radius:10px;">
+
 	
 		<br><br>
 
-		<a href="<?=$title;?>">Oui, je veux me déconnecter</a>
+		<a href="logout.php?logout=yes">Oui, je veux me déconnecter</a>
 	</p>
 
 <?php else: ?>
@@ -45,4 +46,3 @@ require_once '../inc/header.php'
 </html>	
 	
 ?>
-\ No newline at end of file

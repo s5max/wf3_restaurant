@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 	//inclure le header
 
 	//traitement et vérification du formulaire
@@ -9,6 +10,14 @@
 	//inclure le footer
 
 require_once '../../inc/connect.php';
+
+
+if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin'){
+// Redirection vers la page de connexion si non connecté
+header('Location: ../login.php');
+die;
+}
+
 
 $errors = [];
 $post = []; // Contiendra les données épurées <3 <3

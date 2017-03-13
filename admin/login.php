@@ -1,8 +1,4 @@
-<?php
-
-	//inclure le header
-
-	//formulaire de connexion
+<?php 
 
 session_start();
 
@@ -10,59 +6,65 @@ require_once '../inc/connect.php';
 
 $err = array();
 
-	if(!empty($_POST)){
+if(!empty($_POST)){
 	foreach($_POST as $key => $value){
 		$post[$key] = trim(strip_tags($value));
 	}
 
 	if(empty($post['ident'])){
-	$err[] = 'Veuillez saisir votre identifiant';
-}
+		$err[] = 'Veuillez saisir votre identifiant';
+	}
 
 	if(empty($post['passwd'])){
 		$err[] = 'Veuillez saisir votre mot de passe';
 	}
 
-	if(count($err) > 0){		
-        $formError = true;
-    }else{
+	if(count($err) > 0){
+		$formError = true;
+	}
+	else {
 		$req = $bdd->prepare('SELECT * FROM users WHERE email = :login LIMIT 1');
 		$req->bindValue(':login', $post['ident']);
 		if($req->execute()){
-		$user = $req->fetch();
+			$user = $req->fetch();
 			if(!empty($user)){
-                if(password_verify($post['passwd'], $user['password'])){
+
+				if(password_verify($post['passwd'], $user['password'])){
 					$_SESSION = array(
-                        'userId'=> $user['userId'],
-				        'nom' 	=> $user['lastname'],
+						'nom' 	=> $user['lastname'],
 						'prenom'=> $user['firstname'],
 						'email' => $user['email'],
+						'role'	=> $user['role'],
 					);
-                header('Location: user/add_recipe.php'); // On redirige vers la page de deconnexion
-			    die();
-				}		
-            else { $errorLogin = true;}
+				var_dump($_SESSION);
+                header('Location: ../home_page.php');
+                }
+				else {
+					$errorLogin = true;
+				}
 			}
-			else { $errorLogin = true; }
+			else {
+				$errorLogin = true;
+			}
 		}
 	}
 
 }
-require_once '../inc/header.php'	
-
+?>
+<?php
+require_once '../inc/header.php'; 
 ?>
 
-
 	<?php 
-		if(isset($formError)) {
+		if(isset($formError) && $formError){
 			echo '<p class="error">'.implode('<br>', $err).'</p>';
 		}
-		if(isset($errorLogin)) {
+		if(isset($errorLogin) && $errorLogin){
 			echo '<p class="error">Erreur d\'identifiant ou de mot de passe</p>';
 		}
 
-		if(isset($_SESSION['lastname']) && isset($_SESSION['firstname']) && isset($_SESSION['email'])){
-			echo '<p class="success">Salut '.$_SESSION['firstame']. ' ' . $_SESSION['lastname'];
+		if(isset($_SESSION['nom']) && isset($_SESSION['prenom']) && isset($_SESSION['email'])){
+			echo '<p class="success">Salut '.$_SESSION['prenom']. ' ' . $_SESSION['nom'];
 			echo '<br>Tu es déjà connecté :-)</p>';
 		}
 	?>
@@ -76,15 +78,10 @@ require_once '../inc/header.php'
 		<input type="password" id="passwd" name="passwd" placeholder="Votre mot de passe">
 
 		<br>
-		<input type="submit" value="connexion">
-		<input type="submit" value="deconnecter">
+		<input type="submit" value="Se connecter">
 	</form>
-	
-<!--inclure le footer-->
-	
 </body>
 </html>
-
 
 
 
