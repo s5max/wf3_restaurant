@@ -2,15 +2,16 @@
 	
 	session_start();
 
-	$_SESSION['userId'];
-
 	$title = 'Accueil Editeur';
+
 
 	//inclure le header
 	require_once '../../inc/header.php';
 	
 	//Connexion à la base de donnée
 	require_once '../../inc/connect.php';
+
+	
 
 /*	//Afficher les recettes de l'utilisateur
 	if(isset($_GET['userId'])){
@@ -49,10 +50,18 @@
 	</table>
 -->
 
+//Modifier le mot de passe
+
+	<form action="#" method="post">
+
+		<input type="password" name="password" id="password">
+		<input type="submit" name="modifier" value="modifier le mot de passe">
+		<input type="submit" name="newMdp" value="Générer un mot de passe">	
+
+	</form>
+
 <?php
 
-	//Modifier le mot de passe
-	
 		
 
 	//inclure le footer
