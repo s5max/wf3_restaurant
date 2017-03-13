@@ -197,27 +197,35 @@ if(!empty($_POST['cover'])){
 		}
 
 
-		if(!is_numeric($post['phone']) || strlen($post['phone']) != 10) {
-			$errors[] = "Le champ Téléphone doit avoir 10 chiffres";
-		}
+		//pour la validation du téléphone
+		if(!preg_match('/^[0-9]{10}$/', $post['tel'])){
+				$errors[] = "Le numéro de téléphone doit contenir obligatoirement 10 chiffres
+				";
+			}
 
 		if(strlen($post['address']) < 2) {
 			$errors[] = "Le champ Adresse doit avoir au minimum 2 caractères";
 		}
 			
-		if(strlen($post['email']) < 2) {
-			$errors[] = "Le champ Adresse doit avoir au minimum 2 caractères";
-		}
+
+
+		//pour la validation de l'email
+		 $pattern  = "/^([^@\s<&>]+)@(?:([-a-z0-9]+)\.)+([a-z]{2,})$/iD";
+
+			 if(!preg_match($pattern, $post['email']))
+			{
+				$errors[] = "Le champ Email n'est vraiment pas conforme";
+			}
 
 
 		if(count($errors) === 0){
 		
 
-			$update = $bdd->prepare('UPDATE options SET name = :restname, phone = :restphone, address = :restadress, email = :restemail');
+			$update = $bdd->prepare('UPDATE options SET name = :restname, tel = :restphone, address = :restadress, email = :restemail');
 
 			
 			$update->bindValue(':restname', $post['name']);
-			$update->bindValue(':restphone', $post['phone']);
+			$update->bindValue(':restphone', $post['tel']);
 			$update->bindValue(':restadress', $post['address']);
 			$update->bindValue(':restemail', $post['email']);
 
@@ -328,7 +336,7 @@ require_once '../../inc/header.php';
 
 		<br>
 		<label for="phone">Téléphone</label>
-		<input type="text" name="phone" value="<?=$options['tel'];?>">
+		<input type="text" name="tel" value="<?=$options['tel'];?>">
 
 		<br>
 		<label for="address">Adresse</label>
