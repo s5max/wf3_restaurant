@@ -35,7 +35,8 @@
 	</head>
 
 	<body>
-		
+
+<!--Barre de navigation-->		
 	<nav>
 
 		<header>
