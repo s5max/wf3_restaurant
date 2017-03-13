@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 	//inclure le header
 
 	//traitement et vérification du formulaire
@@ -9,6 +10,14 @@
 	//inclure le footer
 
 require_once '../../inc/connect.php';
+
+
+if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin'){
+// Redirection vers la page de connexion si non connecté
+header('Location: ../login.php');
+die;
+}
+
 
 $errors = [];
 $post = []; // Contiendra les données épurées <3 <3
@@ -30,29 +39,23 @@ if(!empty($_POST)){
 		$errors[] = 'Le Nom doit comporter entre 5 et 50 caractères';
 	}
 
-    if(!preg_match('/^[\w\d]{8,20}$/', $post['password'])){
-		$errors[] = "Le champ Password doit contenir entre 8 et 20 caractères";
+    if(strlen($post['password']) < 8 || strlen($post['password']) > 20) {
+		$errors[] = "Le champ Password doit avoir au minimum 8 caractères";
 	}
     
-    $pattern  = "/^([^@\s<&>]+)@(?:([-a-z0-9]+)\.)+([a-z]{2,})$/iD";
-    
-     if(!preg_match($pattern, $post['email']))
-    {
-        $errors[] = "Le champ Email n'est vraiment pas conforme";
-    }
+    if(!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+		$errors[] = "Le champ Email n'est pas conforme";
+	}
 
-    if(empty($post['role'])) {
-		$errors[] = "Un rôle doit être attribué à l'utilisateur";
-	}
+
 
 	if(count($errors) === 0)
 	{
-		$insert = $bdd->prepare('INSERT INTO users (firstname, lastname, password, email, role) VALUES (:firstname, :lastname, :password, :email, :role)');
+		$insert = $bdd->prepare('INSERT INTO users (firstname, lastname, password, email) VALUES (:firstname, :lastname, :password, :email)');
 		$insert->bindValue(':firstname', $post['firstname']);
 		$insert->bindValue(':lastname', $post['lastname']);
 		$insert->bindValue(':password', password_hash($post['password'], PASSWORD_DEFAULT));
 		$insert->bindValue(':email', $post['email']);
-		$insert->bindValue(':role', $post['role']);
 	
 
 		if($insert->execute())
@@ -78,7 +81,6 @@ require_once '../../inc/header.php';
 
 <?php
 		if(isset($textErrors)){
-           
 			echo '<p style="color:red">'.$textErrors.'</p>';
 		}
 
@@ -98,18 +100,10 @@ require_once '../../inc/header.php';
 		<input type="text" name="lastname" id="lastname">
 
 		<label for="email">Adresse email</label>
-		<input type="text" name="email" id="email">
+		<input type="email" name="email" id="email">
 		
 		<label for="password">Mot de passe</label>
 		<input type="password" name="password" id="password">
-		
-		<label for="role">Rôle de l'utilisateur</label>    
-            <select name="role">
-            <option value="" selected="selected">--Sélectionnez--</option>
-                <option value="role_editor">Editeur</option>
-                <option value="role_admin">Administrateur</option>
-                
-            </select> 
 
 		<input type="submit" value="Ajouter le membre">
 

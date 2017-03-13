@@ -19,21 +19,18 @@ require_once '../../inc/connect.php';
 
 date_default_timezone_set('America/Martinique');
 
+
+
+
 //Pour ajouter une recette l'utilisateur devra avoir été préalablement authentifié
 
 //Penser à décommenter lors de la mise en place de la session dans le projet
 
-/*
-
-
-if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false){
- 	// Redirection vers la page de connexion si non connecté
- 	header('Location: login.php');
- 	die; 
+if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin' || $_SESSION['role'] != 'role_editor'){
+// Redirection vers la page de connexion si non connecté
+header('Location: ../login.php');
+die;
 }
-
-
-*/
 
 
 
@@ -77,12 +74,12 @@ if(!empty($_POST)){
 		$post[$key] = trim(strip_tags($value));
 	}
 
-	if(!preg_match('/^[\w\d]{5,140}$/', $post['title'])){
-		$errors[] = 'Le titre doit comporter entre 5 et 140 caractères';
+	if(strlen($post['title']) < 5 || strlen($post['title']) > 50){
+		$errors[] = 'Le titre doit comporter entre 5 et 50 caractères';
 	}
 
-	if(!preg_match('/^[\w\d]{20,}$/', $post['content'])){
-		$errors[] = 'La description doit comporter minimum 20 caractères';
+	if(strlen($post['content']) < 20){
+		$errors[] = 'La description doit comporter au moins 20 caractères';
 	}
 
 //Traitement de la photo de la recette
