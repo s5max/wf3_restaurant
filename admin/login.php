@@ -2,6 +2,8 @@
 
 session_start();
 
+$title = 'Connexion utilisateur';
+
 require_once '../inc/connect.php';
 
 $err = array();
@@ -34,13 +36,22 @@ if(!empty($_POST)){
 						'nom' 	=> $user['lastname'],
 						'prenom'=> $user['firstname'],
 						'email' => $user['email'],
-						'role'	=> $user['role'],
+						'role'	=> $user['role']
 					);
-				var_dump($_SESSION);
+				//var_dump($_SESSION);
                 header('Location: ../home_page.php');
                 }
 				else {
 					$errorLogin = true;
+
+					$forget = true;
+
+					$_SESSION = array(
+						
+						'email' => $user['email'],
+						'token' => md5($user['email'])
+					);
+
 				}
 			}
 			else {
@@ -61,6 +72,12 @@ require_once '../inc/header.php';
 		}
 		if(isset($errorLogin) && $errorLogin){
 			echo '<p class="error">Erreur d\'identifiant ou de mot de passe</p>';
+		}
+
+		if(isset($errorLogin) && isset($forget)){
+
+			echo'<a href="">J\'ai oublié mon mot de passe!</a>';
+
 		}
 
 		if(isset($_SESSION['nom']) && isset($_SESSION['prenom']) && isset($_SESSION['email'])){

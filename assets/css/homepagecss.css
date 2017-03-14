@@ -5,7 +5,14 @@ h1 {
     color: gray;
 }
 
-   
+.full {
+    width:100%;
+    height:300px;
+} 
+
+.thumbnail {
+    height: 200px;
+}  
 
 .carousel-inner .item{
     max-width: 100%;
