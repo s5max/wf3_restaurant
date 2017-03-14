@@ -27,14 +27,25 @@ if(!empty($_POST)){
 	if(strlen($post['firstname']) < 2 || strlen($post['firstname']) > 50){
 		$errors[] = 'Le Prénom doit comporter entre 5 et 50 caractères';
 	}
-
+    
+    if(!preg_match("/^[A-Z]/", $post['firstname'])) {
+		$errors[] = 'Le Prénom doit commencer par une majuscule';
+	}
+    
     if(strlen($post['lastname']) < 2 || strlen($post['lastname']) > 50){
 		$errors[] = 'Le Nom doit comporter entre 5 et 50 caractères';
 	}
-
-    if(!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
-		$errors[] = "Le champ Email n'est pas conforme";
-	}
+       
+    if(!preg_match("/^[A-Z]/", $post['lastname'])) {
+		$errors[] = 'Le Nom doit commencer par une majuscule';
+	}  
+    
+    $pattern  = "/^([^@\s<&>]+)@(?:([-a-z0-9]+)\.)+([a-z]{2,})$/iD";
+    
+     if(!preg_match($pattern, $post['email']))
+    {
+        $errors[] = "Le champ Email n'est vraiment pas conforme";
+    }
     
     if(strlen($post['object']) < 2){
 		$errors[] = 'L\'objet doit comporter au moins 2 caractères';
@@ -88,8 +99,9 @@ require_once 'inc/header.php';
 
 
     <?php
-		if(isset($textErrors)){
-			echo '<p style="color:red">'.$textErrors.'</p>';
+
+		if(isset($errorsText)){
+			echo '<p style="color:red">'.$errorsText.'</p>';
 		}
 
 		if(isset($success)){

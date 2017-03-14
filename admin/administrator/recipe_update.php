@@ -17,24 +17,19 @@ session_start();
 
 require_once '../../inc/connect.php';
 
+
+if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin'){
+// Redirection vers la page de connexion si non connecté
+header('Location: ../login.php');
+die;
+}
+
+
 date_default_timezone_set('America/Martinique');
 
 //Pour ajouter une recette l'utilisateur devra avoir été préalablement authentifié
 
 //Penser à décommenter lors de la mise en place de la session dans le projet
-
-/*
-
-
-if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false){
- 	// Redirection vers la page de connexion si non connecté
- 	header('Location: login.php');
- 	die; 
-}
-
-
-*/
-
 
 
 /*---------------------------------------------------------------- 
