@@ -5,13 +5,19 @@
 	$_SESSION['userId'];
 
 	$title = 'Accueil Editeur';
+    require_once '../../inc/connect.php';
+
 
 	//inclure le header
 	require_once '../../inc/header.php';
 	
 	//Connexion à la base de donnée
-	require_once '../../inc/connect.php';
-
+	
+    if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin' && $_SESSION['role'] != 'role_editor'){
+// Redirection vers la page de connexion si non connecté
+header('Location: ../login.php');
+die;
+}
 /*	//Afficher les recettes de l'utilisateur
 	if(isset($_GET['userId'])){
 

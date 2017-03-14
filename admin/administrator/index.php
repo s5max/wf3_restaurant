@@ -32,8 +32,8 @@ die;
 $title = 'Section d\'Administration';
 
 //-- Si l'on veut afficher sur la page une bienvenue à l'admin avec son nom et son prénom
-$_SESSION['prenom'] = $lastname;
-$_SESSION['nom'] = $firstname;
+$lastname= $_SESSION['prenom'] ;
+$firstname= $_SESSION['nom'] ;
 
 
 

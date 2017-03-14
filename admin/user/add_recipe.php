@@ -26,7 +26,7 @@ date_default_timezone_set('America/Martinique');
 
 //Penser à décommenter lors de la mise en place de la session dans le projet
 
-if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin' || $_SESSION['role'] != 'role_editor'){
+if(!isset($_SESSION['is_logged']) || $_SESSION['is_logged'] == false || $_SESSION['role'] != 'role_admin' && $_SESSION['role'] != 'role_editor'){
 // Redirection vers la page de connexion si non connecté
 header('Location: ../login.php');
 die;

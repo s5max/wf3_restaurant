@@ -31,13 +31,19 @@ if(!empty($_POST)){
 
 				if(password_verify($post['passwd'], $user['password'])){
 					$_SESSION = array(
+                        'userId'=> $user['userId'],
 						'nom' 	=> $user['lastname'],
 						'prenom'=> $user['firstname'],
 						'email' => $user['email'],
 						'role'	=> $user['role'],
 					);
-				var_dump($_SESSION);
-                header('Location: ../home_page.php');
+                   $_SESSION['is_logged']=true;
+				if ($user['role']=="role_admin"){
+                header('Location: administrator/index.php');
+                }
+                    if ($user['role']=="role_editor"){
+                header('Location: user/index.php');
+                }
                 }
 				else {
 					$errorLogin = true;
